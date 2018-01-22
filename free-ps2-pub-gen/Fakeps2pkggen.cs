@@ -533,13 +533,12 @@ namespace free_ps2_pub_gen {
                                     idl.Text = "Generating PKG";
                                     MakePKG(gp4);
                                     if (!error) MessagBox.Show("Done !");
-                                }
-                            }
-                            MessagBox.Error("No Output Folder set !");
-                        } MessagBox.Error("No PS2 ISO selected !");
-                    } MessagBox.Error("Content ID is not on Form of: XXYYYY-XXXXYYYYY_YY-XXXXXXXXXXXXXXXX");
-                } MessagBox.Error("Content ID is empty !");
-            } MessagBox.Error("No FW Selected !");
+                                } else MessagBox.Error("Base is not Ok !");
+                            } else MessagBox.Error("No Output Folder set !");
+                        } else MessagBox.Error("No PS2 ISO selected !");
+                    } else MessagBox.Error("Content ID is not on Form of: XXYYYY-XXXXYYYYY_YY-XXXXXXXXXXXXXXXX");
+                } else MessagBox.Error("Content ID is empty !");
+            } else MessagBox.Error("No FW Selected !");
         }
     }
 }
