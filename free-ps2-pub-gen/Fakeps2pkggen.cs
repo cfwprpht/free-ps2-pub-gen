@@ -218,6 +218,7 @@ namespace free_ps2_pub_gen {
             orbis_pub_cmd = sett.PubCmd;
             db = sett.DB;
             clearISOOnCloseToolStrip.Checked = sett.ClearIso;
+            _iso = true;
 
             // Just in case.
             string currDir = Directory.GetCurrentDirectory();
@@ -384,7 +385,7 @@ namespace free_ps2_pub_gen {
         /// <param name="sender">The Sender.</param>
         /// <param name="e">The Event Arguments.</param>
         private void ButtonOpen_Click(object sender, EventArgs e) {
-            if (_iso) ChooseISO();
+            if (!_iso) ChooseISO();
             else {
                 string outPath = MessagBox.ShowFolderBrowse("Choose Folder to save PKG", lastOutPath);
                 if (outPath != string.Empty) pkgOut = lastOutPath = outPath;
