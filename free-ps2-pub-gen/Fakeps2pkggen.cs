@@ -37,7 +37,7 @@ namespace free_ps2_pub_gen {
         /// Open a File Fialog to Choose the ISO.
         /// </summary>
         private void ChooseISO() {
-            string iso = MessagBox.ShowOpenFile("Select PS2 ISO", "ISO Image (.*iso)|*.iso", lastIsoPath);
+            string iso = MessagBox.ShowOpenFile("Select PS2 ISO", "ISO Image (*.iso)|*.iso", lastIsoPath);
             if (iso != string.Empty) ps2Iso = lastIsoPath = iso;
         }
 
