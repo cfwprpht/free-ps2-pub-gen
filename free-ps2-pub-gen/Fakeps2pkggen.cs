@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -12,6 +13,15 @@ namespace free_ps2_pub_gen {
     /// Fake Ps2 PKG Generator.
     /// </summary>
     public partial class Fakeps2pkggen : Form {
+        #region Vars
+        /// <summary>
+        /// Defines the default text viewer to use for editing the script file.
+        /// </summary>
+        public static string textViewer = string.Empty;
+
+        /// <summary>
+        /// Some Privates.
+        /// </summary>
         private string lastIsoPath = string.Empty;
         private string lastOutPath = string.Empty;
         private string ps2Iso = string.Empty;
@@ -21,13 +31,19 @@ namespace free_ps2_pub_gen {
         private string db = string.Empty;
         private string newPass = string.Empty;
         private string tempPath = string.Empty;
+        private string defaultBrowser = string.Empty;
         private string[][] Apps;
         private string[][] Auths;
+        private string[] elfs;
+        private string _ps4TitleID = string.Empty;
+        private string _ps2TitleID = string.Empty;
         private bool _iso = false;
         private static bool error = false;
-        private List<string> Fws;
         private StringComparison ignore = StringComparison.InvariantCultureIgnoreCase;
+        private List<string> Fws;
+        #endregion Vars
 
+        #region Functions
         /// <summary>
         /// Program Initializer.
         /// </summary>
@@ -57,8 +73,8 @@ namespace free_ps2_pub_gen {
         /// </summary>
         /// <param name="titleId">The TitleID decimal to convert.</param>
         /// <returns>A string, representing the convertet decimal byte value.</returns>
-        private string GetDecimalBytes(decimal titleId) {
-            byte[] titleIdBytes = titleId.GetBytes();
+        private string GetDecimalBytes(string titleId) {
+            byte[] titleIdBytes = Convert.ToDecimal(titleId).GetBytes();
             return BitConverter.ToString(titleIdBytes).Substring(0, 5).Replace("-", "");
         }
 
@@ -72,12 +88,12 @@ namespace free_ps2_pub_gen {
             else if (!File.Exists(db)) return false;
             else if (!Directory.Exists(tempPath)) return false;
             else if (!File.Exists(tempPath + @"\template.gp4")) return false;
-            else if (!Directory.Exists(tempPath + @"\workfiles")) return false;
-            else if (!File.Exists(tempPath + @"\workfiles\eboot.bin")) return false;
-            else if (!File.Exists(tempPath + @"\workfiles\ps2-emu-compiler.self")) return false;
-            else if (!File.Exists(tempPath + @"\workfiles\ps2-emu-libSceFios2.prx")) return false;
-            else if (!File.Exists(tempPath + @"\workfiles\ps2-emu-libc.prx")) return false;
-            else if (!File.Exists(tempPath + @"\workfiles\config-emu-ps4.txt")) return false;
+            else if (!File.Exists(tempPath + @"\app0\eboot.elf")) return false;
+            else if (!File.Exists(tempPath + @"\app0\ps2-emu-compiler.elf")) return false;
+            else if (!File.Exists(tempPath + @"\app0\sce_module\libSceFios2.prx")) return false;
+            else if (!File.Exists(tempPath + @"\app0\sce_module\libc.prx")) return false;
+            else if (!File.Exists(tempPath + @"\app0\config-emu-ps4.txt")) return false;
+            else if (!IsElfDecrypted()) return false;
             return true;
         }
 
@@ -85,56 +101,182 @@ namespace free_ps2_pub_gen {
         /// Pre Clean the template_pkg folder before reusing it.
         /// </summary>
         private void PreClean() {
-            if (File.Exists(tempPath + @"\template_pkg\Image0\image\disc01.iso")) File.Delete(tempPath + @"\template_pkg\Image0\image\disc01.iso");
-            if (File.Exists(tempPath + @"\template_pkg\Image0\eboot.fself")) File.Delete(tempPath + @"\template_pkg\Image0\eboot.fself");
-            if (File.Exists(tempPath + @"\template_pkg\Image0\ps2-emu-compiler.fself")) File.Delete(tempPath + @"\template_pkg\Image0\ps2-emu-compiler.fself");
-            if (File.Exists(tempPath + @"\template_pkg\Image0\sce_module\libSceFios2.fself")) File.Delete(tempPath + @"\template_pkg\Image0\sce_module\libSceFios2.fself");
-            if (File.Exists(tempPath + @"\template_pkg\Image0\sce_module\libc.fself")) File.Delete(tempPath + @"\template_pkg\Image0\sce_module\libc.fself");
-            if (File.Exists(tempPath + @"\template_pkg\Image0\config-emu-ps4.txt")) File.Delete(tempPath + @"\template_pkg\Image0\config-emu-ps4.txt");
+            if (File.Exists(tempPath + @"\app0\image\disc01.iso")) File.Delete(tempPath + @"\app0\image\disc01.iso");
+            if (File.Exists(tempPath + @"\app0\eboot.fself")) File.Delete(tempPath + @"\app0\eboot.fself");
+            if (File.Exists(tempPath + @"\app0\ps2-emu-compiler.fself")) File.Delete(tempPath + @"\app0\ps2-emu-compiler.fself");
+            if (File.Exists(tempPath + @"\app0\sce_module\libSceFios2.fself")) File.Delete(tempPath + @"\app0\sce_module\libSceFios2.fself");
+            if (File.Exists(tempPath + @"\app0\sce_module\libc.fself")) File.Delete(tempPath + @"\app0\sce_module\libc.fself");
+
+            string[] projects = Directory.GetFiles(tempPath, "*.gp4");
+            if (projects.Length == 2) {
+                if (projects[0].GetName().XReplace(@"(\w{2})(\d{4})-(\w{4})(\d{5})_(\d{2})-([a-zA-Z0-9]{16})", "").Replace(".gp4", "") == string.Empty) File.Delete(projects[0]);
+                else if (projects[1].GetName().XReplace(@"(\w{2})(\d{4})-(\w{4})(\d{5})_(\d{2})-([a-zA-Z0-9]{16})", "").Replace(".gp4", "") == string.Empty) File.Delete(projects[1]);
+            } else if (projects.Length > 2) {
+                if (MessagBox.Question("Found more then two project files ! (.gp4)\nShall i delete all of them ? (excluding the template for sure)") == DialogResult.OK) {
+                    foreach (string line in projects) { if (!line.Contain("template.gp4") && line.Contain(".gp4")) File.Delete(line); }
+                }
+            }
         }
 
         /// <summary>
         /// Check the projects gp4 and add entrys if needed.
         /// </summary>
-        private string CheckGp4() {
-            string gp4 = pkgOut + @"\" + textContentID.Text + ".gp4";
-            File.Copy(tempPath + @"\template.gp4", gp4);
-            string[] lines = File.ReadAllLines(gp4);
+        private string PatchGp4() {
+            bool check = false;
+            bool ps2TitlePatch = false;            
+            string[] lines = File.ReadAllLines(tempPath + @"\template.gp4");
 
             foreach (string line in lines) {
-                if (line.Contains("<package content_id=")) line.Replace("EP1004-CUSA04488_00-SLES503260000001", textContentID.Text);
-                if (line.Contains("<package content_id=passcode=")) {
+                if (line.Contain("<package content_id=")) line.XReplace(@"(\w{2})(\d{4})-(\w{4})(\d{5})_(\d{2})-([a-zA-Z0-9]{16})", textContentID.Text);
+                if (line.Contain("<package content_id=passcode=")) {
                     if (newPass != "00000000000000000000000000000000") line.Replace("00000000000000000000000000000000", newPass);
-                } else if (line.Contains("sce_sys/nptitle.dat")) {
-                    if (nptitlenpbindToolStrip.Checked) line.Replace("<!--", "").Replace("-->", "");
-                } else if (line.Contains("sce_sys/npbind.dat")) {
-                    if (nptitlenpbindToolStrip.Checked) line.Replace("<!--", "").Replace("-->", "");
-                } else if (line.Contains("sce_sys/trophy/trophy00.trp")) {
-                    if (trophydataToolStrip.Checked) line.Replace("<!--", "").Replace("-->", "");
+                } else if (line.Contain("sce_sys/nptitle.dat")) {
+                    if (nptitlenpbindToolStrip.Checked) {
+                        line.Replace("<!--", "").Replace(" -->", "");
+                        PatchNpDat();
+                    } else check = true;
+                } else if (line.Contain("sce_sys/npbind.dat")) {
+                    if (nptitlenpbindToolStrip.Checked) {
+                        line.Replace("<!--", "").Replace(" -->", "");
+                    } else check = true;
+                } else if (line.Contain("sce_sys/trophy/trophy00.trp")) {
+                    if (trophydataToolStrip.Checked) line.Replace("<!--", "").Replace(" -->", "");
+                    else check = true;
+                } else if (line.Contain("eboot.bin") && !line.Contain("eboot.fself")) line.Replace(@"app0\", "XX").XReplace(@"XXeboot.(\w+)", @"app0\eboot.fself");
+                else if (line.Contain("ps2-emu-compiler.self") && !line.Contain("ps2-emu-compiler.fself")) line.Replace(@"app0\", "XX").XReplace(@"XXps2-emu-compiler.(\w+)", @"app0\ps2-emu-compiler.fself");
+                else if (line.Contain("libSceFios2.prx") && !line.Contain("libSceFios2.fself")) line.Replace(@"app0\sce_module\", "XX").XReplace(@"XXlibSceFios2.(\w+)", @"app0\sce_module\libSceFios2.fself");
+                else if (line.Contain("libc.prx") && !line.Contain("libc.fself")) line.Replace(@"app0\sce_module\", "XX").XReplace(@"XXlibc.(\w+)", @"app0\sce_module\libc.fself");
+                else if (line.Contain("_cli.conf")) {
+                    if (patchesCliConfToolStrip.Checked) {
+                        ps2TitlePatch = true;
+                        string[] getFile = Directory.GetFiles(tempPath + @"\app0\patches\", "*_cli.conf");
+                        if (getFile.Length == 0) return "No single titleID_cli.conf found but you defined to patch this file back into the project !";
+                        else if (getFile.Length == 1) File.Move(getFile[0], getFile[0].XReplace(@"(\w{4})-(\d{5})", _ps2TitleID.Insert(4, "-")));
+                        else if (getFile.Length > 1) return "To many titleID_cli.conf found !\nPlease clean " + tempPath + @"\app0\patches\";
+
+                    } else check = true;
+                } else if (line.Contain("_config.lua")) {
+                    if (patchesConfLuaToolStrip.Checked) {
+                        ps2TitlePatch = true;
+                        string[] getFile = Directory.GetFiles(tempPath + @"\app0\patches\", "*_config.lua");
+                        if (getFile.Length == 0) return "No single titleID__config.lua found but you defined to patch this file back into the project !";
+                        else if (getFile.Length == 1) File.Move(getFile[0], getFile[0].XReplace(@"(\w{4})-(\d{5})", _ps2TitleID.Insert(4, "-")));
+                        else if (getFile.Length > 1) return "To many titleID__config.lua found !\nPlease clean " + tempPath + @"\app0\patches\";
+
+                    } else check = true;
+                } else if (line.Contain("feature_data")) {
+                    if (featuredataToolStrip.Checked) ps2TitlePatch = true;
+                    else check = true;
+                }
+
+                if (ps2TitlePatch) {
+                    line.Replace("<!--", "").Replace(" -->", "");
+                    line.XReplace(@"(\w{4})-(\d{5})", _ps2TitleID);
+                    ps2TitlePatch = false;
+                }
+                if (check) {
+                    if (!line.Contain("<!--<file")) line.Replace("<file", "<!--<file");
+                    if (!line.Contain("/> -->")) line.Replace("/>", "/> -->");
+                    check = false;
                 }
             }
 
-            File.Delete(gp4);
+            string gp4 = pkgOut + @"\" + textContentID.Text + ".gp4";
             File.Create(gp4).Close();
             File.WriteAllLines(gp4, lines);
+            File.Copy(gp4, tempPath + gp4.GetName());
             return gp4;
+        }
+
+        /// <summary>
+        /// Patch param.sfo.
+        /// </summary>
+        private bool PatchSFO() {
+            if (File.Exists(tempPath + @"\app0\sce_sys\param.sfo")) {
+                ASCIIEncoding encode = new ASCIIEncoding();
+                byte[] contID = encode.GetBytes(textContentID.Text);
+                byte[] titID = encode.GetBytes(_ps4TitleID);
+                byte[] gName = encode.GetBytes(textBoxGameName.Text);
+
+                try {
+                    using (BinaryWriter binWriter = new BinaryWriter(new FileStream(tempPath + @"\app0\sce_sys\param.sfo", FileMode.Open, FileAccess.ReadWrite))) {
+                        binWriter.BaseStream.Seek(0x2F8, SeekOrigin.Begin); // Content ID.
+                        binWriter.Write(contID, 0, contID.Length);
+
+                        binWriter.BaseStream.Seek(0x5D0, SeekOrigin.Begin); // Game Name.
+                        binWriter.Write(gName, 0, gName.Length);
+
+                        binWriter.BaseStream.Seek(0x650, SeekOrigin.Begin); // Title ID.
+                        binWriter.Write(titID, 0, titID.Length);
+                        binWriter.Close();
+                    } return true;
+                } catch (Exception exc) { MessagBox.Error(exc.ToString()); }
+            } else MessagBox.Error("Can't access '" + tempPath + @"\app0\sce_sys\param.sfo'" + " !");
+            return false;
         }
 
         /// <summary>
         /// Check the emus config and add entrys if needed.
         /// </summary>
-        private void CheckConfig() {
-            File.Copy(tempPath + @"\workfiles\config-emu-ps4.txt", tempPath + @"\template_pkg\Image0\config-emu-ps4.txt");
-            string[] lines = File.ReadAllLines(tempPath + @"\template_pkg\Image0\config-emu-ps4.txt");
+        private void PatchConfig(){
+            string[] lines = File.ReadAllLines(tempPath + @"\app0\config-emu-ps4.txt");
 
             foreach (string line in lines) {
-                if (line.Contain("--path-patches='/app0/patches'") && !patchesToolStrip.Checked) line.Replace("--path-patches='/app0/patches'", "");
-                if (line.Contain("--path-trophydata='/app0/trophy_data'") && !trophydataToolStrip.Checked) line.Replace("--path-trophydata='/app0/trophy_data'", "");
-                if (line.Contain("--path-featuredata='/app0/feature_data'") && !featuredataToolStrip.Checked) line.Replace("--path-featuredata='/app0/feature_data'", "");
-                if (line.Contain("--path-toolingscript='/app0/patches'") && !toolingscriptToolStrip.Checked) line.Replace("--path-toolingscript='/app0/patches'", "");
-                if (line.Contain("--path-featuredata='/app0/patches'") && !featuredatapatchToolStrip.Checked) line.Replace("--path-featuredata='/app0/patches'", "");
+                if (line.Contain("--path-patches='/app0/patches'")) {
+                    if (patchesCliConfToolStrip.Checked || patchesConfLuaToolStrip.Checked) line.Replace("#", "");
+                    else if (!line.Contain("#")) line.Insert(0, "#");
+                } else if (line.Contain("--path-trophydata='/app0/trophy_data'")) {
+                    if (trophydataToolStrip.Checked) line.Replace("#", "");
+                    else if (!line.Contain("#")) line.Insert(0, "#");
+                } else if (line.Contain("--path-featuredata='/app0/feature_data'")) {
+                    if (featuredataToolStrip.Checked) line.Replace("#", "");
+                    else if (!line.Contain("#")) line.Insert(0, "#");
+                } else if (line.Contain("--path-toolingscript='/app0/patches'")) {
+                    if (toolingscriptToolStrip.Checked) line.Replace("#", "");
+                    else if (!line.Contain("#")) line.Insert(0, "#");
+                } else if (line.Contain("--path-featuredata='/app0/patches'")) {
+                    if (featuredatapatchToolStrip.Checked) line.Replace("#", "");
+                    else if (!line.Contain("#")) line.Insert(0, "#");
+                } else if (line.Contain("--ps2-title-id=")) line.XReplace(@"(\w{4})-(\d{5})", _ps2TitleID.Insert(4, "-"));
+                else if (line.Contain("--trophy-support=")) {
+                    if (trophydataToolStrip.Checked) line.XReplace(@"(\d{1})", "1");
+                    else line.XReplace(@"(\d{1})", "0");
+                }
             }
-            FileEx.RemoveEmptyLines(tempPath + @"\template_pkg\Image0\config-emu-ps4.txt");            
+            File.Delete(tempPath + @"\app0\config-emu-ps4.txt");
+            File.Create(tempPath + @"\app0\config-emu-ps4.txt").Close();
+            File.WriteAllLines(tempPath + @"\app0\config-emu-ps4.txt", lines);
+        }
+
+        /// <summary>
+        /// Patch Title ID into nptitle.dat.
+        /// </summary>
+        private void PatchNpDat() {
+            if (!File.Exists(tempPath + @"\app0\sce_sys\nptitle.dat")) { MessagBox.Error("Can not access '" + tempPath + @"\app0\sce_sys\nptitle.dat' !"); return; }
+            using (BinaryWriter binWriter = new BinaryWriter(new FileStream(tempPath + @"\app0\sce_sys\nptitle.dat", FileMode.Open, FileAccess.ReadWrite))) {
+                binWriter.BaseStream.Seek(0x10, SeekOrigin.Begin);
+                byte[] _titleId = Encoding.ASCII.GetBytes(_ps4TitleID);
+                binWriter.Write(_titleId, 0, _titleId.Length);
+                binWriter.Close();
+            }
+        }
+
+        /// <summary>
+        /// Check if ELFs of the base are Decrypted.
+        /// </summary>
+        /// <param name="path">Path to the template folder.</param>
+        private bool IsElfDecrypted() {
+            byte[] magic = new byte[4] { 0x7F, 0x45, 0x4C, 0x46, };
+
+            foreach (string elf in elfs) {
+                using (BinaryReader binReader = new BinaryReader(new FileStream(elf, FileMode.Open, FileAccess.Read))) {
+                    byte[] fmagic = new byte[4];
+                    binReader.Read(fmagic, 0, 4);
+                    if (!magic.Equals(fmagic)) return false;
+                    binReader.Close();
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -142,10 +284,8 @@ namespace free_ps2_pub_gen {
         /// </summary>
         /// <param name="deci">The TitleIDs decimal value as a hex string.</param>
         private bool FakeSign(string deci) {
-            string workPath = tempPath + @"\workfiles\";
             int index = toolStripComboBox.SelectedIndex;
-            string elfs = string.Empty;
-            string selfs = string.Empty;
+            string _elfs = string.Empty;
             int count = 0;
             bool err = false;
             
@@ -158,12 +298,14 @@ namespace free_ps2_pub_gen {
 
             foreach (string elf in Apps[index]) {
                 string auth = Auths[index][count];
-                auth.Replace("XXXX", deci);
-                if (!elf.Contains("ps2-emu-compiler.self")) elfs = tempPath + @"\workfiles\" + elf.Replace("ps2-emu-", "");
-                else elfs = tempPath + @"\workfiles\" + elf;
-                selfs = tempPath + @"\template_pkg\Image0\" + elf.Replace(".bin", ".fself").Replace(".self", ".fself").Replace(".prx", ".fself");
+                auth = deci + auth.Substring(4, auth.Length - 4);
 
-                run.Arguments = "--paid " + auth.Substring(0, 16).EndianSwapp() + " --auth-info " + auth + " " + elfs + " " + selfs;
+                _elfs = string.Empty;
+                foreach (string found in elfs) { if (found.Contain(elf)) _elfs = found; }
+                if (_elfs == string.Empty) { MessagBox.Error("Couldn't find: " + elf); return false; }
+
+                run.Arguments = "--paid " + auth.Substring(0, 16).EndianSwapp() + " --auth-info " + auth + " " + _elfs + " " + _elfs.Replace(".elf", "fself").Replace(".prx", "fself");
+                MessagBox.Debug(run.Arguments);
                 call.StartInfo = run;
 
                 try { call.Start(); }
@@ -175,12 +317,6 @@ namespace free_ps2_pub_gen {
             }
 
             if (err) return false;
-
-            idl.Text = "Coping ELFs";
-            foreach (string file in Directory.GetFiles(tempPath + @"\workfiles\", "*.fself")) {
-                if (file.Contains("libc") || file.Contains("libSceFios2")) File.Move(file, file.Replace(@"workfiles\", @"template_pkg\Image0\sce_module\"));
-                File.Move(file, file.Replace(@"workfiles\", @"template_pkg\Image0\"));
-            }
             return true;
         }
 
@@ -203,7 +339,9 @@ namespace free_ps2_pub_gen {
             call.BeginErrorReadLine();
             call.WaitForExit();
         }
-
+        #endregion Functions
+                
+        #region Events
         /// <summary>
         /// On Load of Form do.
         /// </summary>
@@ -217,7 +355,8 @@ namespace free_ps2_pub_gen {
             make_fself = sett.MakeFSELF;
             orbis_pub_cmd = sett.PubCmd;
             db = sett.DB;
-            clearISOOnCloseToolStrip.Checked = sett.ClearIso;
+            textViewer = sett.TxtViewer;
+            MessagBox.ButtonPosition = ButtonPosition.Center;
             _iso = true;
 
             // Just in case.
@@ -227,8 +366,22 @@ namespace free_ps2_pub_gen {
             if (db == string.Empty) db = currDir + @"\template\authinfo_emu.txt";
             if (!File.Exists(make_fself)) MessagBox.Error("Can not find make_fself.py.\nEither drop the file into me, so i know where it is or\npleace it into my directory so i can acces it.");
             if (!File.Exists(orbis_pub_cmd)) MessagBox.Error("Can not find orbis-pub-cmd-ps2.exe.\nEither drop the file into me, so i know where it is or\npleace it into my directory so i can acces it.");
-            if (!Directory.Exists(currDir + @"\template\template_pkg\")) MessagBox.Error("Can not find the Tempalte folder !\nPlease place the Template folder within same dir.");
+            if (!Directory.Exists(currDir + @"\template")) MessagBox.Error("Can not find the Template folder !\nPlease place the Template folder within same dir.");
             else tempPath = currDir + @"\template";
+            
+            // Get default text viewer if the setttings value is empty.
+            if (textViewer == string.Empty) {
+                textViewer = SwissKnife.GetDefaultApp(@"textfile\");
+                if (textViewer == string.Empty) MessagBox.Info("Can't get the default TXT Viewer for editing the script.\nPlease tell me which app to use.\nOptions > Paths > Default Text/Code Viewer");
+            }
+
+            // Set elfs path.
+            elfs = new string[4] {
+                tempPath + @"\app0\eboot.elf",
+                tempPath + @"\app0\ps2-emu-compiler.elf",
+                tempPath + @"\app0\sce_module\libSceFios2.prx",
+                tempPath + @"\app0\sce_module\libc.prx",
+            };
 
             // Load Authentication DataBase.
             if (!File.Exists(db)) MessagBox.Error("Can not find authinfo.txt.\nEither drop the file into me, so i know where it is or\npleace it into my directory so i can acces it.");
@@ -299,6 +452,22 @@ namespace free_ps2_pub_gen {
         }
 
         /// <summary>
+        /// On close if form do.
+        /// </summary>
+        /// <param name="sender">The Sender.</param>
+        /// <param name="e">The Event Arguments.</param>
+        private void Fakeps2pkggen_FormClosing(object sender, FormClosingEventArgs e) {
+            Settings sett = new Settings();
+            sett.LastIsoPath = lastIsoPath;
+            sett.LastOutPath = lastOutPath;
+            sett.MakeFSELF = make_fself;
+            sett.PubCmd = orbis_pub_cmd;
+            sett.DB = db;
+            sett.TxtViewer = textViewer;
+            sett.Save();
+        }
+
+        /// <summary>
         /// Error Event Handler for the make_fself.py and orbis-pub-cmd-ps2.exe Process.
         /// </summary>
         /// <param name="sendingProcess">The Process which triggered this Event.</param>
@@ -339,6 +508,19 @@ namespace free_ps2_pub_gen {
         }
 
         /// <summary>
+        /// On TextBox CotnentID text changed.
+        /// </summary>
+        /// <param name="sender">The Sender.</param>
+        /// <param name="e">The Event Arguments.</param>
+        private void TextContentID_TextChanged(object sender, EventArgs e) {
+            if (textContentID.Text.Length >= 16) textBoxPs4TID.Text = textContentID.Text.Substring(7, 9);
+            else if (textContentID.Text.Length >= 29) {
+                textBoxPs4TID.Text = textContentID.Text.Substring(7, 9);
+                textBoxPs2TID.Text = textContentID.Text.Substring(20, 9);
+            }
+        }
+
+        /// <summary>
         /// On Open Iso Tool Strip click.
         /// </summary>
         /// <param name="sender">The Sender.</param>
@@ -367,17 +549,7 @@ namespace free_ps2_pub_gen {
         /// </summary>
         /// <param name="sender">The Sender.</param>
         /// <param name="e">The Event Arguments.</param>
-        private void CloseToolStrip_Click(object sender, EventArgs e) {
-            Settings sett = new Settings();
-            sett.LastIsoPath = lastIsoPath;
-            sett.LastOutPath = lastOutPath;
-            sett.MakeFSELF = make_fself;
-            sett.PubCmd = orbis_pub_cmd;
-            sett.DB = db;
-            sett.ClearIso = clearISOOnCloseToolStrip.Checked;
-            sett.Save();
-            Close();
-        }
+        private void CloseToolStrip_Click(object sender, EventArgs e) { Close(); }
 
         /// <summary>
         /// On Button Open Click.
@@ -435,13 +607,35 @@ namespace free_ps2_pub_gen {
         private void AuthinfotxtToolStrip_Click(object sender, EventArgs e) { MessagBox.Info(db); }
 
         /// <summary>
-        /// On Tool Strip Patches click.
+        /// On Options Tool Strip Default Text and Code Viewer click.
         /// </summary>
         /// <param name="sender">The Sender.</param>
         /// <param name="e">The Event Arguments.</param>
-        private void PatchesToolStrip_Click(object sender, EventArgs e) {
-            if (patchesToolStrip.Checked) patchesToolStrip.Checked = true;
-            else patchesToolStrip.Checked = true;
+        private void OptionsDefTxtCVieToolStrip_Click(object sender, EventArgs e) {
+            if (MessagBox.Question(Buttons.YesNo, textViewer + Environment.NewLine + Environment.NewLine + "Do you want to use a other Application ?") == DialogResult.Yes) {
+                string newEditor = MessagBox.ShowOpenFile("Choose Editor", "All Files (*.*)|*.*", textViewer);
+                if (newEditor != string.Empty) textViewer = newEditor;
+            }
+        }
+
+        /// <summary>
+        /// On Tool Strip Patches Cli conf click.
+        /// </summary>
+        /// <param name="sender">The Sender.</param>
+        /// <param name="e">The Event Arguments.</param>
+        private void PatchesCliConfToolStrip_Click(object sender, EventArgs e) {
+            if (patchesCliConfToolStrip.Checked) patchesCliConfToolStrip.Checked = true;
+            else patchesCliConfToolStrip.Checked = true;
+        }
+
+        /// <summary>
+        /// On Tool Strip Conf Lua click.
+        /// </summary>
+        /// <param name="sender">The Sender.</param>
+        /// <param name="e">The Event Arguments.</param>
+        private void PatchesConfLuaToolStrip_Click(object sender, EventArgs e) {
+            if (patchesConfLuaToolStrip.Checked) patchesConfLuaToolStrip.Checked = true;
+            else patchesConfLuaToolStrip.Checked = true;
         }
 
         /// <summary>
@@ -495,11 +689,25 @@ namespace free_ps2_pub_gen {
         }
 
         /// <summary>
+        /// On Emulator Tool Strip click.
+        /// </summary>
+        /// <param name="sender">The Sender.</param>
+        /// <param name="e">The Event Arguments.</param>
+        private void EmulatorToolStrip_Click(object sender, EventArgs e) {
+            EmulatorOptions emuOpt = new EmulatorOptions();
+            emuOpt.ShowDialog();
+            emuOpt.Dispose();
+        }
+
+        /// <summary>
         /// On Tool Strip About click.
         /// </summary>
         /// <param name="sender">The Sender.</param>
         /// <param name="e">The Event Arguments.</param>
-        private void AboutToolStripA_Click(object sender, EventArgs e) { MessagBox.Info("PS2 Fake PKG Generator for PS4\nby cfwprpht\n\nPS4- PS2 Fake Emu PKG Technic and orbis-pub-cmd patch\nby flatz"); }
+        private void AboutToolStripA_Click(object sender, EventArgs e) {
+            About about = new About();
+            about.ShowDialog();
+        }
 
         /// <summary>
         /// On Tool Strip Build click.
@@ -509,36 +717,49 @@ namespace free_ps2_pub_gen {
         private void ToolStripBuild_Click(object sender, EventArgs e) {
             if (toolStripComboBox.SelectedIndex > -1) {
                 if (textContentID.Text != string.Empty) {
-                    if (HaseContentIDFormat(textContentID.Text)) {
-                        if (ps2Iso != string.Empty) {
-                            if (pkgOut != string.Empty) {
-                                if (BaseIsFine()) {
-                                    // Copy ISO and check if destination dir is empty.
-                                    idl.Text = "Cleaning old files up";
-                                    PreClean();
-                                    idl.Text = "Coping ISO";
-                                    File.Copy(ps2Iso, tempPath + @"\template_pkg\Image0\image\disc01.iso");
+                    if (textBoxGameName.Text != string.Empty) {
+                        if (HaseContentIDFormat(textContentID.Text)) {
+                            if (ps2Iso != string.Empty) {
+                                if (pkgOut != string.Empty) {
+                                    if (BaseIsFine()) {
+                                        // Copy ISO and check if destination dir is empty.
+                                        idl.Text = "Cleaning old files up";
+                                        PreClean();
+                                        idl.Text = "Coping ISO";
+                                        File.Copy(ps2Iso, tempPath + @"\app0\image\disc01.iso");
 
-                                    // Get decimal of ItelID and convert to byte string, then overload to hte fake signing routine.
-                                    idl.Text = "Fake Signing ELFs";
-                                    if (!FakeSign(GetDecimalBytes(Convert.ToDecimal(textContentID.Text.Substring(11, 5))))) { idl.Text = "Error Fake Signing ELFs"; return; }
+                                        // Get decimal of ItelID and convert to byte string, then overload to hte fake signing routine.
+                                        idl.Text = "Fake Signing ELFs";
+                                        _ps4TitleID = textBoxPs4TID.Text;
+                                        _ps2TitleID = textBoxPs2TID.Text;
+                                        if (!FakeSign(GetDecimalBytes(_ps4TitleID.Substring(4, 5)))) { idl.Text = "Error Fake Signing ELFs"; return; }
 
-                                    // Copy and check the gp4 file and change all needed stuff.
-                                    string gp4 = CheckGp4();
+                                        // Copy and check the gp4 file and change all needed stuff.
+                                        string gp4 = PatchGp4();
+                                        if (gp4 == string.Empty) {
+                                            MessagBox.Error("Error to many _cli.conf/_config.lua files with a title ID found.\nI don't know which one to use.\nPlease clean 'app0/patches/'.");
+                                            idl.Text = "Error to many _cli.conf/_config.lua files.";
+                                            return;
+                                        }
 
-                                    // Do the same with the config file.
-                                    CheckConfig();
+                                        // Do the same with the config file.
+                                        PatchConfig();
 
-                                    // Call orbis pub cmd.
-                                    idl.Text = "Generating PKG";
-                                    MakePKG(gp4);
-                                    if (!error) MessagBox.Show("Done !");
-                                } else MessagBox.Error("Base is not Ok !");
-                            } else MessagBox.Error("No Output Folder set !");
-                        } else MessagBox.Error("No PS2 ISO selected !");
-                    } else MessagBox.Error("Content ID is not on Form of: XXYYYY-XXXXYYYYY_YY-XXXXXXXXXXXXXXXX");
+                                        // And do not forget the sfo.
+                                        if (!PatchSFO()) return;
+
+                                        // Call orbis pub cmd.
+                                        idl.Text = "Generating PKG";
+                                        MakePKG(gp4);
+                                        if (!error) MessagBox.Show("Done !");
+                                    } else MessagBox.Error("Base is not Ok !");
+                                } else MessagBox.Error("No Output Folder set !");
+                            } else MessagBox.Error("No PS2 ISO selected !");
+                        } else MessagBox.Error("Content ID is not in Form of: XXYYYY-XXXXYYYYY_YY-XXXXXXXXXXXXXXXX");
+                    } else MessagBox.Error("Game Name is empty !");
                 } else MessagBox.Error("Content ID is empty !");
             } else MessagBox.Error("No FW Selected !");
         }
+        #endregion Events
     }
 }

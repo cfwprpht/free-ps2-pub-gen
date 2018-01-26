@@ -41,9 +41,9 @@ namespace free_ps2_pub_gen.Properties {
 
         [UserScopedSetting]
         [DefaultSettingValue("")]
-        public bool ClearIso {
-            get { return (bool)this["ClearIso"]; }
-            set { this["ClearIso"] = value; }
+        public string TxtViewer {
+            get { return (string)this["TxtViewer"]; }
+            set { this["TxtViewer"] = value; }
         }
     }
 }

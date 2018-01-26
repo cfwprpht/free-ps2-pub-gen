@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>ps2-pub.ico</ApplicationIcon>
+    <ApplicationIcon>emu.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -49,6 +49,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EmulatorOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmulatorOptions.Designer.cs">
+      <DependentUpon>EmulatorOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fakeps2pkggen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,6 +71,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SwissKnife.cs" />
+    <EmbeddedResource Include="About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmulatorOptions.resx">
+      <DependentUpon>EmulatorOptions.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fakeps2pkggen.resx">
       <DependentUpon>Fakeps2pkggen.cs</DependentUpon>
     </EmbeddedResource>
@@ -125,6 +143,7 @@
     <None Include="res\Folder_Open.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="emu.ico" />
     <Content Include="ps2-pub.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -38,15 +38,17 @@
             this.makefselfpyToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.orbispubcmdexeToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.authinfotxtToolStrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsDefTxtCVieToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.adBackToolStrip = new System.Windows.Forms.ToolStripMenuItem();
-            this.patchesToolStrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.patchesCliConfToolStrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.patchesConfLuaToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.trophydataToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.featuredataToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.featuredatapatchToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.toolingscriptToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.nptitlenpbindToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.changePasscodeToolStrip = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearISOOnCloseToolStrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.emulatorToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripA = new System.Windows.Forms.ToolStripMenuItem();
             this.textIsoAndOutPath = new System.Windows.Forms.TextBox();
@@ -56,10 +58,14 @@
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripBuild = new System.Windows.Forms.ToolStripButton();
             this.toolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.labelGUI = new System.Windows.Forms.Label();
-            this.labelFlatz = new System.Windows.Forms.Label();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.idl = new System.Windows.Forms.ToolStripStatusLabel();
+            this.textBoxGameName = new System.Windows.Forms.TextBox();
+            this.labelGameName = new System.Windows.Forms.Label();
+            this.textBoxPs2TID = new System.Windows.Forms.TextBox();
+            this.textBoxPs4TID = new System.Windows.Forms.TextBox();
+            this.labelPs4TID = new System.Windows.Forms.Label();
+            this.labelPs2TitId = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -91,7 +97,7 @@
             // 
             this.openISOToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("openISOToolStrip.Image")));
             this.openISOToolStrip.Name = "openISOToolStrip";
-            this.openISOToolStrip.Size = new System.Drawing.Size(124, 22);
+            this.openISOToolStrip.Size = new System.Drawing.Size(152, 22);
             this.openISOToolStrip.Text = "Open ISO";
             this.openISOToolStrip.Click += new System.EventHandler(this.OpenISOToolStrip_Click);
             // 
@@ -109,7 +115,7 @@
             this.pathsToolStrip,
             this.adBackToolStrip,
             this.changePasscodeToolStrip,
-            this.clearISOOnCloseToolStrip});
+            this.emulatorToolStrip});
             this.optionsToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("optionsToolStrip.Image")));
             this.optionsToolStrip.Name = "optionsToolStrip";
             this.optionsToolStrip.Size = new System.Drawing.Size(77, 20);
@@ -120,17 +126,18 @@
             this.pathsToolStrip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.makefselfpyToolStrip,
             this.orbispubcmdexeToolStrip,
-            this.authinfotxtToolStrip});
+            this.authinfotxtToolStrip,
+            this.optionsDefTxtCVieToolStrip});
             this.pathsToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("pathsToolStrip.Image")));
             this.pathsToolStrip.Name = "pathsToolStrip";
-            this.pathsToolStrip.Size = new System.Drawing.Size(171, 22);
+            this.pathsToolStrip.Size = new System.Drawing.Size(167, 22);
             this.pathsToolStrip.Text = "Paths";
             // 
             // makefselfpyToolStrip
             // 
             this.makefselfpyToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("makefselfpyToolStrip.Image")));
             this.makefselfpyToolStrip.Name = "makefselfpyToolStrip";
-            this.makefselfpyToolStrip.Size = new System.Drawing.Size(175, 22);
+            this.makefselfpyToolStrip.Size = new System.Drawing.Size(208, 22);
             this.makefselfpyToolStrip.Text = "make_fself.py";
             this.makefselfpyToolStrip.Click += new System.EventHandler(this.MakefselfpyToolStrip_Click);
             // 
@@ -138,22 +145,31 @@
             // 
             this.orbispubcmdexeToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("orbispubcmdexeToolStrip.Image")));
             this.orbispubcmdexeToolStrip.Name = "orbispubcmdexeToolStrip";
-            this.orbispubcmdexeToolStrip.Size = new System.Drawing.Size(175, 22);
-            this.orbispubcmdexeToolStrip.Text = "orbis-pub-cmd.exe";
+            this.orbispubcmdexeToolStrip.Size = new System.Drawing.Size(208, 22);
+            this.orbispubcmdexeToolStrip.Text = "orbis-pub-cmd-ps2.exe";
             this.orbispubcmdexeToolStrip.Click += new System.EventHandler(this.OrbispubcmdexeToolStrip_Click);
             // 
             // authinfotxtToolStrip
             // 
             this.authinfotxtToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("authinfotxtToolStrip.Image")));
             this.authinfotxtToolStrip.Name = "authinfotxtToolStrip";
-            this.authinfotxtToolStrip.Size = new System.Drawing.Size(175, 22);
+            this.authinfotxtToolStrip.Size = new System.Drawing.Size(208, 22);
             this.authinfotxtToolStrip.Text = "authinfo.txt";
             this.authinfotxtToolStrip.Click += new System.EventHandler(this.AuthinfotxtToolStrip_Click);
+            // 
+            // optionsDefTxtCVieToolStrip
+            // 
+            this.optionsDefTxtCVieToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("optionsDefTxtCVieToolStrip.Image")));
+            this.optionsDefTxtCVieToolStrip.Name = "optionsDefTxtCVieToolStrip";
+            this.optionsDefTxtCVieToolStrip.Size = new System.Drawing.Size(208, 22);
+            this.optionsDefTxtCVieToolStrip.Text = "Default Text/Code Viewer";
+            this.optionsDefTxtCVieToolStrip.Click += new System.EventHandler(this.OptionsDefTxtCVieToolStrip_Click);
             // 
             // adBackToolStrip
             // 
             this.adBackToolStrip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.patchesToolStrip,
+            this.patchesCliConfToolStrip,
+            this.patchesConfLuaToolStrip,
             this.trophydataToolStrip,
             this.featuredataToolStrip,
             this.featuredatapatchToolStrip,
@@ -161,22 +177,30 @@
             this.nptitlenpbindToolStrip});
             this.adBackToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("adBackToolStrip.Image")));
             this.adBackToolStrip.Name = "adBackToolStrip";
-            this.adBackToolStrip.Size = new System.Drawing.Size(171, 22);
+            this.adBackToolStrip.Size = new System.Drawing.Size(167, 22);
             this.adBackToolStrip.Text = "Add Back";
             // 
-            // patchesToolStrip
+            // patchesCliConfToolStrip
             // 
-            this.patchesToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("patchesToolStrip.Image")));
-            this.patchesToolStrip.Name = "patchesToolStrip";
-            this.patchesToolStrip.Size = new System.Drawing.Size(174, 22);
-            this.patchesToolStrip.Text = "-patches";
-            this.patchesToolStrip.Click += new System.EventHandler(this.PatchesToolStrip_Click);
+            this.patchesCliConfToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("patchesCliConfToolStrip.Image")));
+            this.patchesCliConfToolStrip.Name = "patchesCliConfToolStrip";
+            this.patchesCliConfToolStrip.Size = new System.Drawing.Size(178, 22);
+            this.patchesCliConfToolStrip.Text = "-patches/cli.conf";
+            this.patchesCliConfToolStrip.Click += new System.EventHandler(this.PatchesCliConfToolStrip_Click);
+            // 
+            // patchesConfLuaToolStrip
+            // 
+            this.patchesConfLuaToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("patchesConfLuaToolStrip.Image")));
+            this.patchesConfLuaToolStrip.Name = "patchesConfLuaToolStrip";
+            this.patchesConfLuaToolStrip.Size = new System.Drawing.Size(178, 22);
+            this.patchesConfLuaToolStrip.Text = "-patches/config.lua";
+            this.patchesConfLuaToolStrip.Click += new System.EventHandler(this.PatchesConfLuaToolStrip_Click);
             // 
             // trophydataToolStrip
             // 
             this.trophydataToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("trophydataToolStrip.Image")));
             this.trophydataToolStrip.Name = "trophydataToolStrip";
-            this.trophydataToolStrip.Size = new System.Drawing.Size(174, 22);
+            this.trophydataToolStrip.Size = new System.Drawing.Size(178, 22);
             this.trophydataToolStrip.Text = "-trophydata";
             this.trophydataToolStrip.Click += new System.EventHandler(this.TrophydataToolStrip_Click);
             // 
@@ -184,7 +208,7 @@
             // 
             this.featuredataToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("featuredataToolStrip.Image")));
             this.featuredataToolStrip.Name = "featuredataToolStrip";
-            this.featuredataToolStrip.Size = new System.Drawing.Size(174, 22);
+            this.featuredataToolStrip.Size = new System.Drawing.Size(178, 22);
             this.featuredataToolStrip.Text = "-featuredata";
             this.featuredataToolStrip.Click += new System.EventHandler(this.FeaturedataToolStrip_Click);
             // 
@@ -192,7 +216,7 @@
             // 
             this.featuredatapatchToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("featuredatapatchToolStrip.Image")));
             this.featuredatapatchToolStrip.Name = "featuredatapatchToolStrip";
-            this.featuredatapatchToolStrip.Size = new System.Drawing.Size(174, 22);
+            this.featuredatapatchToolStrip.Size = new System.Drawing.Size(178, 22);
             this.featuredatapatchToolStrip.Text = "-featuredata/patch";
             this.featuredatapatchToolStrip.Click += new System.EventHandler(this.FeaturedatapatchToolStrip_Click);
             // 
@@ -200,7 +224,7 @@
             // 
             this.toolingscriptToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("toolingscriptToolStrip.Image")));
             this.toolingscriptToolStrip.Name = "toolingscriptToolStrip";
-            this.toolingscriptToolStrip.Size = new System.Drawing.Size(174, 22);
+            this.toolingscriptToolStrip.Size = new System.Drawing.Size(178, 22);
             this.toolingscriptToolStrip.Text = "-toolingscript";
             this.toolingscriptToolStrip.Click += new System.EventHandler(this.ToolingscriptToolStrip_Click);
             // 
@@ -208,7 +232,7 @@
             // 
             this.nptitlenpbindToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("nptitlenpbindToolStrip.Image")));
             this.nptitlenpbindToolStrip.Name = "nptitlenpbindToolStrip";
-            this.nptitlenpbindToolStrip.Size = new System.Drawing.Size(174, 22);
+            this.nptitlenpbindToolStrip.Size = new System.Drawing.Size(178, 22);
             this.nptitlenpbindToolStrip.Text = "-nptitle/npbind";
             this.nptitlenpbindToolStrip.Click += new System.EventHandler(this.NptitlenpbindToolStrip_Click);
             // 
@@ -216,16 +240,17 @@
             // 
             this.changePasscodeToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("changePasscodeToolStrip.Image")));
             this.changePasscodeToolStrip.Name = "changePasscodeToolStrip";
-            this.changePasscodeToolStrip.Size = new System.Drawing.Size(171, 22);
+            this.changePasscodeToolStrip.Size = new System.Drawing.Size(167, 22);
             this.changePasscodeToolStrip.Text = "Change Passcode";
             this.changePasscodeToolStrip.Click += new System.EventHandler(this.ChangePasscodeToolStrip_Click);
             // 
-            // clearISOOnCloseToolStrip
+            // emulatorToolStrip
             // 
-            this.clearISOOnCloseToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("clearISOOnCloseToolStrip.Image")));
-            this.clearISOOnCloseToolStrip.Name = "clearISOOnCloseToolStrip";
-            this.clearISOOnCloseToolStrip.Size = new System.Drawing.Size(171, 22);
-            this.clearISOOnCloseToolStrip.Text = "Clear ISO on Close";
+            this.emulatorToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("emulatorToolStrip.Image")));
+            this.emulatorToolStrip.Name = "emulatorToolStrip";
+            this.emulatorToolStrip.Size = new System.Drawing.Size(167, 22);
+            this.emulatorToolStrip.Text = "Emulator";
+            this.emulatorToolStrip.Click += new System.EventHandler(this.EmulatorToolStrip_Click);
             // 
             // aboutToolStrip
             // 
@@ -248,7 +273,7 @@
             // 
             this.textIsoAndOutPath.BackColor = System.Drawing.SystemColors.WindowText;
             this.textIsoAndOutPath.ForeColor = System.Drawing.Color.Yellow;
-            this.textIsoAndOutPath.Location = new System.Drawing.Point(12, 91);
+            this.textIsoAndOutPath.Location = new System.Drawing.Point(12, 139);
             this.textIsoAndOutPath.Name = "textIsoAndOutPath";
             this.textIsoAndOutPath.Size = new System.Drawing.Size(303, 20);
             this.textIsoAndOutPath.TabIndex = 1;
@@ -257,7 +282,7 @@
             // buttonOpen
             // 
             this.buttonOpen.Image = ((System.Drawing.Image)(resources.GetObject("buttonOpen.Image")));
-            this.buttonOpen.Location = new System.Drawing.Point(321, 87);
+            this.buttonOpen.Location = new System.Drawing.Point(321, 135);
             this.buttonOpen.Name = "buttonOpen";
             this.buttonOpen.Size = new System.Drawing.Size(26, 26);
             this.buttonOpen.TabIndex = 2;
@@ -268,17 +293,19 @@
             // 
             this.textContentID.BackColor = System.Drawing.SystemColors.WindowText;
             this.textContentID.ForeColor = System.Drawing.Color.Yellow;
-            this.textContentID.Location = new System.Drawing.Point(12, 60);
+            this.textContentID.Location = new System.Drawing.Point(12, 87);
+            this.textContentID.MaxLength = 36;
             this.textContentID.Name = "textContentID";
             this.textContentID.Size = new System.Drawing.Size(239, 20);
             this.textContentID.TabIndex = 3;
             this.textContentID.Text = "EP1004-CUSA04488_00-SLES503260000001";
             this.textContentID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textContentID.TextChanged += new System.EventHandler(this.TextContentID_TextChanged);
             // 
             // labelContentID
             // 
             this.labelContentID.AutoSize = true;
-            this.labelContentID.Location = new System.Drawing.Point(257, 63);
+            this.labelContentID.Location = new System.Drawing.Point(257, 90);
             this.labelContentID.Name = "labelContentID";
             this.labelContentID.Size = new System.Drawing.Size(58, 13);
             this.labelContentID.TabIndex = 4;
@@ -286,6 +313,7 @@
             // 
             // toolStrip
             // 
+            this.toolStrip.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.toolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripBuild,
@@ -314,34 +342,12 @@
             this.toolStripComboBox.Size = new System.Drawing.Size(121, 31);
             this.toolStripComboBox.Text = "Select FW";
             // 
-            // labelGUI
-            // 
-            this.labelGUI.AutoSize = true;
-            this.labelGUI.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelGUI.ForeColor = System.Drawing.Color.Blue;
-            this.labelGUI.Location = new System.Drawing.Point(9, 121);
-            this.labelGUI.Name = "labelGUI";
-            this.labelGUI.Size = new System.Drawing.Size(99, 13);
-            this.labelGUI.TabIndex = 6;
-            this.labelGUI.Text = "GUI by cfwprpht";
-            // 
-            // labelFlatz
-            // 
-            this.labelFlatz.AutoSize = true;
-            this.labelFlatz.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelFlatz.ForeColor = System.Drawing.Color.Blue;
-            this.labelFlatz.Location = new System.Drawing.Point(185, 121);
-            this.labelFlatz.Name = "labelFlatz";
-            this.labelFlatz.Size = new System.Drawing.Size(168, 13);
-            this.labelFlatz.TabIndex = 7;
-            this.labelFlatz.Text = "PS4- PS2 PKG Tec by flat_z";
-            // 
             // statusStrip
             // 
             this.statusStrip.BackColor = System.Drawing.SystemColors.WindowText;
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.idl});
-            this.statusStrip.Location = new System.Drawing.Point(0, 140);
+            this.statusStrip.Location = new System.Drawing.Point(0, 170);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(357, 22);
             this.statusStrip.TabIndex = 8;
@@ -354,14 +360,83 @@
             this.idl.Size = new System.Drawing.Size(53, 17);
             this.idl.Text = "message";
             // 
+            // textBoxGameName
+            // 
+            this.textBoxGameName.BackColor = System.Drawing.SystemColors.WindowText;
+            this.textBoxGameName.ForeColor = System.Drawing.Color.Yellow;
+            this.textBoxGameName.Location = new System.Drawing.Point(12, 58);
+            this.textBoxGameName.MaxLength = 50;
+            this.textBoxGameName.Name = "textBoxGameName";
+            this.textBoxGameName.Size = new System.Drawing.Size(239, 20);
+            this.textBoxGameName.TabIndex = 9;
+            this.textBoxGameName.Text = "Star Wars Racer";
+            // 
+            // labelGameName
+            // 
+            this.labelGameName.AutoSize = true;
+            this.labelGameName.Location = new System.Drawing.Point(257, 61);
+            this.labelGameName.Name = "labelGameName";
+            this.labelGameName.Size = new System.Drawing.Size(66, 13);
+            this.labelGameName.TabIndex = 10;
+            this.labelGameName.Text = "Game Name";
+            // 
+            // textBoxPs2TID
+            // 
+            this.textBoxPs2TID.BackColor = System.Drawing.SystemColors.WindowText;
+            this.textBoxPs2TID.ForeColor = System.Drawing.Color.Yellow;
+            this.textBoxPs2TID.Location = new System.Drawing.Point(162, 113);
+            this.textBoxPs2TID.MaxLength = 9;
+            this.textBoxPs2TID.Name = "textBoxPs2TID";
+            this.textBoxPs2TID.ReadOnly = true;
+            this.textBoxPs2TID.Size = new System.Drawing.Size(75, 20);
+            this.textBoxPs2TID.TabIndex = 11;
+            this.textBoxPs2TID.Text = "SLES50326";
+            this.textBoxPs2TID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBoxPs4TID
+            // 
+            this.textBoxPs4TID.BackColor = System.Drawing.SystemColors.WindowText;
+            this.textBoxPs4TID.ForeColor = System.Drawing.Color.Yellow;
+            this.textBoxPs4TID.Location = new System.Drawing.Point(12, 113);
+            this.textBoxPs4TID.MaxLength = 9;
+            this.textBoxPs4TID.Name = "textBoxPs4TID";
+            this.textBoxPs4TID.ReadOnly = true;
+            this.textBoxPs4TID.Size = new System.Drawing.Size(76, 20);
+            this.textBoxPs4TID.TabIndex = 12;
+            this.textBoxPs4TID.Text = "CUSA04488";
+            this.textBoxPs4TID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // labelPs4TID
+            // 
+            this.labelPs4TID.AutoSize = true;
+            this.labelPs4TID.Location = new System.Drawing.Point(91, 117);
+            this.labelPs4TID.Name = "labelPs4TID";
+            this.labelPs4TID.Size = new System.Drawing.Size(61, 13);
+            this.labelPs4TID.TabIndex = 13;
+            this.labelPs4TID.Text = "PS4-TitleID";
+            // 
+            // labelPs2TitId
+            // 
+            this.labelPs2TitId.AutoSize = true;
+            this.labelPs2TitId.Location = new System.Drawing.Point(239, 117);
+            this.labelPs2TitId.Name = "labelPs2TitId";
+            this.labelPs2TitId.Size = new System.Drawing.Size(61, 13);
+            this.labelPs2TitId.TabIndex = 14;
+            this.labelPs2TitId.Text = "PS2-TitleID";
+            // 
             // Fakeps2pkggen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(357, 162);
+            this.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.ClientSize = new System.Drawing.Size(357, 192);
+            this.Controls.Add(this.labelPs2TitId);
+            this.Controls.Add(this.labelPs4TID);
+            this.Controls.Add(this.textBoxPs4TID);
+            this.Controls.Add(this.textBoxPs2TID);
+            this.Controls.Add(this.labelGameName);
+            this.Controls.Add(this.textBoxGameName);
             this.Controls.Add(this.statusStrip);
-            this.Controls.Add(this.labelFlatz);
-            this.Controls.Add(this.labelGUI);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.labelContentID);
             this.Controls.Add(this.textContentID);
@@ -374,6 +449,7 @@
             this.MaximizeBox = false;
             this.Name = "Fakeps2pkggen";
             this.Text = "PS2 Fake PKG Generator for PS4";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Fakeps2pkggen_FormClosing);
             this.Load += new System.EventHandler(this.Fakeps2pkggen_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Fakeps2pkggen_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Fakeps2pkggen_DragEnter);
@@ -402,8 +478,6 @@
         private System.Windows.Forms.Label labelContentID;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton toolStripBuild;
-        private System.Windows.Forms.Label labelGUI;
-        private System.Windows.Forms.Label labelFlatz;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBox;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStrip;
         private System.Windows.Forms.ToolStripMenuItem changePasscodeToolStrip;
@@ -412,15 +486,23 @@
         private System.Windows.Forms.ToolStripMenuItem orbispubcmdexeToolStrip;
         private System.Windows.Forms.ToolStripMenuItem authinfotxtToolStrip;
         private System.Windows.Forms.ToolStripMenuItem adBackToolStrip;
-        private System.Windows.Forms.ToolStripMenuItem patchesToolStrip;
+        private System.Windows.Forms.ToolStripMenuItem patchesCliConfToolStrip;
         private System.Windows.Forms.ToolStripMenuItem trophydataToolStrip;
         private System.Windows.Forms.ToolStripMenuItem featuredataToolStrip;
         private System.Windows.Forms.ToolStripMenuItem toolingscriptToolStrip;
-        private System.Windows.Forms.ToolStripMenuItem clearISOOnCloseToolStrip;
         private System.Windows.Forms.ToolStripMenuItem nptitlenpbindToolStrip;
         private System.Windows.Forms.ToolStripMenuItem featuredatapatchToolStrip;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel idl;
+        private System.Windows.Forms.ToolStripMenuItem emulatorToolStrip;
+        private System.Windows.Forms.ToolStripMenuItem optionsDefTxtCVieToolStrip;
+        private System.Windows.Forms.ToolStripMenuItem patchesConfLuaToolStrip;
+        private System.Windows.Forms.TextBox textBoxGameName;
+        private System.Windows.Forms.Label labelGameName;
+        private System.Windows.Forms.TextBox textBoxPs2TID;
+        private System.Windows.Forms.TextBox textBoxPs4TID;
+        private System.Windows.Forms.Label labelPs4TID;
+        private System.Windows.Forms.Label labelPs2TitId;
     }
 }
 

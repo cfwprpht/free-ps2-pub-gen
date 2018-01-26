@@ -1,4 +1,5 @@
-﻿using free_ps2_pub_gen.Properties;
+﻿using Microsoft.Win32;
+using free_ps2_pub_gen.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -3371,5 +3372,25 @@ namespace free_ps2_pub_gen {
             return result;
         }
         #endregion Functions
+    }
+
+    /// <summary>
+    /// SwissKnife main class.
+    /// </summary>
+    class SwissKnife {
+        private const string sh = @"shell\";
+        private const string cmd = @"command\";
+        private const string open = sh + @"open\" + cmd;
+
+        /// <summary>
+        /// Gets the default Application to run with for a specific extension.
+        /// </summary>
+        /// <param name="type">The type of for what we shall check for.</param>
+        /// <returns>The path to the default file application or and empty string.</returns>
+        public static string GetDefaultApp(string type) {
+            RegistryKey defaultApp = Registry.ClassesRoot.OpenSubKey(type + open);
+            if (defaultApp != null) return defaultApp.GetValue("").ToString().Replace("%1", "").Replace("\"", "");
+            else return string.Empty;
+        }
     }
 }
