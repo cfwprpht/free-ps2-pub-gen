@@ -63,8 +63,6 @@
             this.textBoxGameName = new System.Windows.Forms.TextBox();
             this.labelGameName = new System.Windows.Forms.Label();
             this.textBoxPs2TID = new System.Windows.Forms.TextBox();
-            this.textBoxPs4TID = new System.Windows.Forms.TextBox();
-            this.labelPs4TID = new System.Windows.Forms.Label();
             this.labelPs2TitId = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -97,7 +95,7 @@
             // 
             this.openISOToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("openISOToolStrip.Image")));
             this.openISOToolStrip.Name = "openISOToolStrip";
-            this.openISOToolStrip.Size = new System.Drawing.Size(152, 22);
+            this.openISOToolStrip.Size = new System.Drawing.Size(124, 22);
             this.openISOToolStrip.Text = "Open ISO";
             this.openISOToolStrip.Click += new System.EventHandler(this.OpenISOToolStrip_Click);
             // 
@@ -273,7 +271,7 @@
             // 
             this.textIsoAndOutPath.BackColor = System.Drawing.SystemColors.WindowText;
             this.textIsoAndOutPath.ForeColor = System.Drawing.Color.Yellow;
-            this.textIsoAndOutPath.Location = new System.Drawing.Point(12, 139);
+            this.textIsoAndOutPath.Location = new System.Drawing.Point(12, 134);
             this.textIsoAndOutPath.Name = "textIsoAndOutPath";
             this.textIsoAndOutPath.Size = new System.Drawing.Size(303, 20);
             this.textIsoAndOutPath.TabIndex = 1;
@@ -282,7 +280,7 @@
             // buttonOpen
             // 
             this.buttonOpen.Image = ((System.Drawing.Image)(resources.GetObject("buttonOpen.Image")));
-            this.buttonOpen.Location = new System.Drawing.Point(321, 135);
+            this.buttonOpen.Location = new System.Drawing.Point(321, 130);
             this.buttonOpen.Name = "buttonOpen";
             this.buttonOpen.Size = new System.Drawing.Size(26, 26);
             this.buttonOpen.TabIndex = 2;
@@ -293,10 +291,10 @@
             // 
             this.textContentID.BackColor = System.Drawing.SystemColors.WindowText;
             this.textContentID.ForeColor = System.Drawing.Color.Yellow;
-            this.textContentID.Location = new System.Drawing.Point(12, 87);
+            this.textContentID.Location = new System.Drawing.Point(12, 104);
             this.textContentID.MaxLength = 36;
             this.textContentID.Name = "textContentID";
-            this.textContentID.Size = new System.Drawing.Size(239, 20);
+            this.textContentID.Size = new System.Drawing.Size(267, 20);
             this.textContentID.TabIndex = 3;
             this.textContentID.Text = "EP1004-CUSA04488_00-SLES503260000001";
             this.textContentID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -305,7 +303,7 @@
             // labelContentID
             // 
             this.labelContentID.AutoSize = true;
-            this.labelContentID.Location = new System.Drawing.Point(257, 90);
+            this.labelContentID.Location = new System.Drawing.Point(285, 107);
             this.labelContentID.Name = "labelContentID";
             this.labelContentID.Size = new System.Drawing.Size(58, 13);
             this.labelContentID.TabIndex = 4;
@@ -347,7 +345,7 @@
             this.statusStrip.BackColor = System.Drawing.SystemColors.WindowText;
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.idl});
-            this.statusStrip.Location = new System.Drawing.Point(0, 170);
+            this.statusStrip.Location = new System.Drawing.Point(0, 163);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(357, 22);
             this.statusStrip.TabIndex = 8;
@@ -364,17 +362,17 @@
             // 
             this.textBoxGameName.BackColor = System.Drawing.SystemColors.WindowText;
             this.textBoxGameName.ForeColor = System.Drawing.Color.Yellow;
-            this.textBoxGameName.Location = new System.Drawing.Point(12, 58);
+            this.textBoxGameName.Location = new System.Drawing.Point(12, 75);
             this.textBoxGameName.MaxLength = 50;
             this.textBoxGameName.Name = "textBoxGameName";
-            this.textBoxGameName.Size = new System.Drawing.Size(239, 20);
+            this.textBoxGameName.Size = new System.Drawing.Size(186, 20);
             this.textBoxGameName.TabIndex = 9;
             this.textBoxGameName.Text = "Star Wars Racer";
             // 
             // labelGameName
             // 
             this.labelGameName.AutoSize = true;
-            this.labelGameName.Location = new System.Drawing.Point(257, 61);
+            this.labelGameName.Location = new System.Drawing.Point(80, 59);
             this.labelGameName.Name = "labelGameName";
             this.labelGameName.Size = new System.Drawing.Size(66, 13);
             this.labelGameName.TabIndex = 10;
@@ -384,7 +382,7 @@
             // 
             this.textBoxPs2TID.BackColor = System.Drawing.SystemColors.WindowText;
             this.textBoxPs2TID.ForeColor = System.Drawing.Color.Yellow;
-            this.textBoxPs2TID.Location = new System.Drawing.Point(162, 113);
+            this.textBoxPs2TID.Location = new System.Drawing.Point(204, 75);
             this.textBoxPs2TID.MaxLength = 9;
             this.textBoxPs2TID.Name = "textBoxPs2TID";
             this.textBoxPs2TID.ReadOnly = true;
@@ -393,32 +391,10 @@
             this.textBoxPs2TID.Text = "SLES50326";
             this.textBoxPs2TID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBoxPs4TID
-            // 
-            this.textBoxPs4TID.BackColor = System.Drawing.SystemColors.WindowText;
-            this.textBoxPs4TID.ForeColor = System.Drawing.Color.Yellow;
-            this.textBoxPs4TID.Location = new System.Drawing.Point(12, 113);
-            this.textBoxPs4TID.MaxLength = 9;
-            this.textBoxPs4TID.Name = "textBoxPs4TID";
-            this.textBoxPs4TID.ReadOnly = true;
-            this.textBoxPs4TID.Size = new System.Drawing.Size(76, 20);
-            this.textBoxPs4TID.TabIndex = 12;
-            this.textBoxPs4TID.Text = "CUSA04488";
-            this.textBoxPs4TID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // labelPs4TID
-            // 
-            this.labelPs4TID.AutoSize = true;
-            this.labelPs4TID.Location = new System.Drawing.Point(91, 117);
-            this.labelPs4TID.Name = "labelPs4TID";
-            this.labelPs4TID.Size = new System.Drawing.Size(61, 13);
-            this.labelPs4TID.TabIndex = 13;
-            this.labelPs4TID.Text = "PS4-TitleID";
-            // 
             // labelPs2TitId
             // 
             this.labelPs2TitId.AutoSize = true;
-            this.labelPs2TitId.Location = new System.Drawing.Point(239, 117);
+            this.labelPs2TitId.Location = new System.Drawing.Point(212, 59);
             this.labelPs2TitId.Name = "labelPs2TitId";
             this.labelPs2TitId.Size = new System.Drawing.Size(61, 13);
             this.labelPs2TitId.TabIndex = 14;
@@ -429,10 +405,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DeepSkyBlue;
-            this.ClientSize = new System.Drawing.Size(357, 192);
+            this.ClientSize = new System.Drawing.Size(357, 185);
             this.Controls.Add(this.labelPs2TitId);
-            this.Controls.Add(this.labelPs4TID);
-            this.Controls.Add(this.textBoxPs4TID);
             this.Controls.Add(this.textBoxPs2TID);
             this.Controls.Add(this.labelGameName);
             this.Controls.Add(this.textBoxGameName);
@@ -500,8 +474,6 @@
         private System.Windows.Forms.TextBox textBoxGameName;
         private System.Windows.Forms.Label labelGameName;
         private System.Windows.Forms.TextBox textBoxPs2TID;
-        private System.Windows.Forms.TextBox textBoxPs4TID;
-        private System.Windows.Forms.Label labelPs4TID;
         private System.Windows.Forms.Label labelPs2TitId;
     }
 }

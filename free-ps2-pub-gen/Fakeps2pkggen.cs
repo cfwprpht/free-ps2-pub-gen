@@ -35,8 +35,7 @@ namespace free_ps2_pub_gen {
         private string[][] Apps;
         private string[][] Auths;
         private string[] elfs;
-        private string _ps4TitleID = string.Empty;
-        private string _ps2TitleID = string.Empty;
+        private string titleID = string.Empty;
         private bool _iso = false;
         private static bool error = false;
         private StringComparison ignore = StringComparison.InvariantCultureIgnoreCase;
@@ -151,7 +150,7 @@ namespace free_ps2_pub_gen {
                         ps2TitlePatch = true;
                         string[] getFile = Directory.GetFiles(tempPath + @"\app0\patches\", "*_cli.conf");
                         if (getFile.Length == 0) return "No single titleID_cli.conf found but you defined to patch this file back into the project !";
-                        else if (getFile.Length == 1) File.Move(getFile[0], getFile[0].XReplace(@"(\w{4})-(\d{5})", _ps2TitleID.Insert(4, "-")));
+                        else if (getFile.Length == 1) File.Move(getFile[0], getFile[0].XReplace(@"(\w{4})-(\d{5})", titleID.Insert(4, "-")));
                         else if (getFile.Length > 1) return "To many titleID_cli.conf found !\nPlease clean " + tempPath + @"\app0\patches\";
 
                     } else check = true;
@@ -160,7 +159,7 @@ namespace free_ps2_pub_gen {
                         ps2TitlePatch = true;
                         string[] getFile = Directory.GetFiles(tempPath + @"\app0\patches\", "*_config.lua");
                         if (getFile.Length == 0) return "No single titleID__config.lua found but you defined to patch this file back into the project !";
-                        else if (getFile.Length == 1) File.Move(getFile[0], getFile[0].XReplace(@"(\w{4})-(\d{5})", _ps2TitleID.Insert(4, "-")));
+                        else if (getFile.Length == 1) File.Move(getFile[0], getFile[0].XReplace(@"(\w{4})-(\d{5})", titleID.Insert(4, "-")));
                         else if (getFile.Length > 1) return "To many titleID__config.lua found !\nPlease clean " + tempPath + @"\app0\patches\";
 
                     } else check = true;
@@ -171,7 +170,7 @@ namespace free_ps2_pub_gen {
 
                 if (ps2TitlePatch) {
                     line.Replace("<!--", "").Replace(" -->", "");
-                    line.XReplace(@"(\w{4})-(\d{5})", _ps2TitleID);
+                    line.XReplace(@"(\w{4})-(\d{5})", titleID);
                     ps2TitlePatch = false;
                 }
                 if (check) {
@@ -195,7 +194,7 @@ namespace free_ps2_pub_gen {
             if (File.Exists(tempPath + @"\app0\sce_sys\param.sfo")) {
                 ASCIIEncoding encode = new ASCIIEncoding();
                 byte[] contID = encode.GetBytes(textContentID.Text);
-                byte[] titID = encode.GetBytes(_ps4TitleID);
+                byte[] titID = encode.GetBytes(titleID);
                 byte[] gName = encode.GetBytes(textBoxGameName.Text);
 
                 try {
@@ -237,7 +236,7 @@ namespace free_ps2_pub_gen {
                 } else if (line.Contain("--path-featuredata='/app0/patches'")) {
                     if (featuredatapatchToolStrip.Checked) line.Replace("#", "");
                     else if (!line.Contain("#")) line.Insert(0, "#");
-                } else if (line.Contain("--ps2-title-id=")) line.XReplace(@"(\w{4})-(\d{5})", _ps2TitleID.Insert(4, "-"));
+                } else if (line.Contain("--ps2-title-id=")) line.XReplace(@"(\w{4})-(\d{5})", titleID.Insert(4, "-"));
                 else if (line.Contain("--trophy-support=")) {
                     if (trophydataToolStrip.Checked) line.XReplace(@"(\d{1})", "1");
                     else line.XReplace(@"(\d{1})", "0");
@@ -255,7 +254,7 @@ namespace free_ps2_pub_gen {
             if (!File.Exists(tempPath + @"\app0\sce_sys\nptitle.dat")) { MessagBox.Error("Can not access '" + tempPath + @"\app0\sce_sys\nptitle.dat' !"); return; }
             using (BinaryWriter binWriter = new BinaryWriter(new FileStream(tempPath + @"\app0\sce_sys\nptitle.dat", FileMode.Open, FileAccess.ReadWrite))) {
                 binWriter.BaseStream.Seek(0x10, SeekOrigin.Begin);
-                byte[] _titleId = Encoding.ASCII.GetBytes(_ps4TitleID);
+                byte[] _titleId = Encoding.ASCII.GetBytes(titleID);
                 binWriter.Write(_titleId, 0, _titleId.Length);
                 binWriter.Close();
             }
@@ -513,11 +512,7 @@ namespace free_ps2_pub_gen {
         /// <param name="sender">The Sender.</param>
         /// <param name="e">The Event Arguments.</param>
         private void TextContentID_TextChanged(object sender, EventArgs e) {
-            if (textContentID.Text.Length >= 16) textBoxPs4TID.Text = textContentID.Text.Substring(7, 9);
-            else if (textContentID.Text.Length >= 29) {
-                textBoxPs4TID.Text = textContentID.Text.Substring(7, 9);
-                textBoxPs2TID.Text = textContentID.Text.Substring(20, 9);
-            }
+            if (textContentID.Text.Length >= 16) textBoxPs2TID.Text = textContentID.Text.Substring(7, 9);
         }
 
         /// <summary>
@@ -730,9 +725,8 @@ namespace free_ps2_pub_gen {
 
                                         // Get decimal of ItelID and convert to byte string, then overload to hte fake signing routine.
                                         idl.Text = "Fake Signing ELFs";
-                                        _ps4TitleID = textBoxPs4TID.Text;
-                                        _ps2TitleID = textBoxPs2TID.Text;
-                                        if (!FakeSign(GetDecimalBytes(_ps4TitleID.Substring(4, 5)))) { idl.Text = "Error Fake Signing ELFs"; return; }
+                                        titleID = textBoxPs2TID.Text;
+                                        if (!FakeSign(GetDecimalBytes(titleID.Substring(4, 5)))) { idl.Text = "Error Fake Signing ELFs"; return; }
 
                                         // Copy and check the gp4 file and change all needed stuff.
                                         string gp4 = PatchGp4();

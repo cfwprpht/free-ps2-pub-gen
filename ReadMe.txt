@@ -14,4 +14,7 @@
  
  Special THX to @zordon605, @ps3120 and @Celest123
  
+ Removed the PS4 TitleID and replaced it with the PS2 TitleID to avoid conflicts with real TitleIDs.
+ THX to @littlebalup for letting me know.
+ 
  -Have Fun- cfwprpht
