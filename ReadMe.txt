@@ -17,4 +17,6 @@
  Removed the PS4 TitleID and replaced it with the PS2 TitleID to avoid conflicts with real TitleIDs.
  THX to @littlebalup for letting me know.
  
+ Patched byte compare routine of the ELF Header Check to my own written one cause......"Equals()" function of MS is shit. :P
+ 
  -Have Fun- cfwprpht

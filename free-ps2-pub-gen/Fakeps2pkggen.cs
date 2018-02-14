@@ -271,7 +271,7 @@ namespace free_ps2_pub_gen {
                 using (BinaryReader binReader = new BinaryReader(new FileStream(elf, FileMode.Open, FileAccess.Read))) {
                     byte[] fmagic = new byte[4];
                     binReader.Read(fmagic, 0, 4);
-                    if (!magic.Equals(fmagic)) return false;
+                    if (!magic.Contains(fmagic)) return false;
                     binReader.Close();
                 }
             }
