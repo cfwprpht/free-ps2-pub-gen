@@ -303,8 +303,7 @@ namespace free_ps2_pub_gen {
                 foreach (string found in elfs) { if (found.Contain(elf)) _elfs = found; }
                 if (_elfs == string.Empty) { MessagBox.Error("Couldn't find: " + elf); return false; }
 
-                run.Arguments = "--paid " + auth.Substring(0, 16).EndianSwapp() + " --auth-info " + auth + " " + _elfs + " " + _elfs.Replace(".elf", "fself").Replace(".prx", "fself");
-                MessagBox.Debug(run.Arguments);
+                run.Arguments = "--paid " + auth.Substring(0, 16).EndianSwapp() + " --auth-info " + auth + " " + _elfs + " " + _elfs.Replace(".elf", "fself");
                 call.StartInfo = run;
 
                 try { call.Start(); }
@@ -360,10 +359,10 @@ namespace free_ps2_pub_gen {
 
             // Just in case.
             string currDir = Directory.GetCurrentDirectory();
-            if (make_fself == string.Empty) make_fself = currDir + @"\make_fself.py";
+            if (make_fself == string.Empty) make_fself = currDir + @"\make_fself.exe";
             if (orbis_pub_cmd == string.Empty) orbis_pub_cmd = currDir + @"\orbis-pub-cmd-ps2.exe";
             if (db == string.Empty) db = currDir + @"\template\authinfo_emu.txt";
-            if (!File.Exists(make_fself)) MessagBox.Error("Can not find make_fself.py.\nEither drop the file into me, so i know where it is or\npleace it into my directory so i can acces it.");
+            if (!File.Exists(make_fself)) MessagBox.Error("Can not find make_fself.exe.\nEither drop the file into me, so i know where it is or\npleace it into my directory so i can acces it.");
             if (!File.Exists(orbis_pub_cmd)) MessagBox.Error("Can not find orbis-pub-cmd-ps2.exe.\nEither drop the file into me, so i know where it is or\npleace it into my directory so i can acces it.");
             if (!Directory.Exists(currDir + @"\template")) MessagBox.Error("Can not find the Template folder !\nPlease place the Template folder within same dir.");
             else tempPath = currDir + @"\template";
@@ -375,11 +374,9 @@ namespace free_ps2_pub_gen {
             }
 
             // Set elfs path.
-            elfs = new string[4] {
+            elfs = new string[2] {
                 tempPath + @"\app0\eboot.elf",
                 tempPath + @"\app0\ps2-emu-compiler.elf",
-                tempPath + @"\app0\sce_module\libSceFios2.prx",
-                tempPath + @"\app0\sce_module\libc.prx",
             };
 
             // Load Authentication DataBase.
@@ -467,7 +464,7 @@ namespace free_ps2_pub_gen {
         }
 
         /// <summary>
-        /// Error Event Handler for the make_fself.py and orbis-pub-cmd-ps2.exe Process.
+        /// Error Event Handler for the make_fself.exe and orbis-pub-cmd-ps2.exe Process.
         /// </summary>
         /// <param name="sendingProcess">The Process which triggered this Event.</param>
         /// <param name="outLine">The Received Data Event Arguments.</param>
@@ -496,7 +493,7 @@ namespace free_ps2_pub_gen {
                 if (files[0].Contains(".iso", ignore)) {
                     ps2Iso = lastIsoPath = files[0];
                     if (_iso) textIsoAndOutPath.Text = files[0];
-                } else if (files[0].Contains("make_fself.py", ignore)) make_fself = files[0];
+                } else if (files[0].Contains("make_fself.exe", ignore)) make_fself = files[0];
                 else if (files[0].Contains("orbis-pub-cmd-ps2.exe", ignore)) orbis_pub_cmd = files[0];
                 else if (files[0].Contains("authinfo_emu.txt", ignore)) db = files[0];
                 else if (files[0].IsFolder()) {
@@ -581,11 +578,11 @@ namespace free_ps2_pub_gen {
         }
 
         /// <summary>
-        /// On Tool Strip make_fself.py click.
+        /// On Tool Strip make_fself.exe click.
         /// </summary>
         /// <param name="sender">The Sender.</param>
         /// <param name="e">The Event Arguments.</param>
-        private void MakefselfpyToolStrip_Click(object sender, EventArgs e) { MessagBox.Info(make_fself); }
+        private void MakefselfToolStrip_Click(object sender, EventArgs e) { MessagBox.Info(make_fself); }
 
         /// <summary>
         /// On Tool Strip orbis-pub-cmd-exe click.
@@ -611,6 +608,28 @@ namespace free_ps2_pub_gen {
                 string newEditor = MessagBox.ShowOpenFile("Choose Editor", "All Files (*.*)|*.*", textViewer);
                 if (newEditor != string.Empty) textViewer = newEditor;
             }
+        }
+
+        /// <summary>
+        /// On Options Tool Strip Clear Settings click.
+        /// </summary>
+        /// <param name="sender">The Sender.</param>
+        /// <param name="e">The Event Arguments.</param>
+        private void optionsClearSettingsToolStrip_Click(object sender, EventArgs e) {
+            if (MessagBox.Question(Buttons.YesNo, "Clear Settings ?") == DialogResult.Yes) {
+                Settings sett = new Settings();
+                sett.Reset();
+                sett.Save();
+                sett.Reload();
+                lastIsoPath = sett.LastIsoPath;
+                lastOutPath = sett.LastOutPath;
+                make_fself = sett.MakeFSELF;
+                orbis_pub_cmd = sett.PubCmd;
+                db = sett.DB;
+                textViewer = sett.TxtViewer;
+            }
+            MessagBox.Info("Will close Application now.");
+            Close();
         }
 
         /// <summary>
@@ -746,7 +765,7 @@ namespace free_ps2_pub_gen {
                                         idl.Text = "Generating PKG";
                                         MakePKG(gp4);
                                         if (!error) MessagBox.Show("Done !");
-                                    } else MessagBox.Error("Base is not Ok !");
+                                    } else MessagBox.Error("Base is not Ok !\nEither Tools:\n'make_fself.exe, orbis-pub-cmd-ps2.exe, authinfo.txt, template dir'\nOr Emu files:\n'eboot.elf, ps2-emu-compiler.elf, libSceFios2.prx, libc.prx, config-emu-ps4.txt'\ncan't be found.");
                                 } else MessagBox.Error("No Output Folder set !");
                             } else MessagBox.Error("No PS2 ISO selected !");
                         } else MessagBox.Error("Content ID is not in Form of: XXYYYY-XXXXYYYYY_YY-XXXXXXXXXXXXXXXX");

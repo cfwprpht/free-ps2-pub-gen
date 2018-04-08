@@ -73,6 +73,7 @@
     <Compile Include="SwissKnife.cs" />
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="EmulatorOptions.resx">
       <DependentUpon>EmulatorOptions.cs</DependentUpon>

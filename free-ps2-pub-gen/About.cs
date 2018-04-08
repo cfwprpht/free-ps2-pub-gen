@@ -26,6 +26,8 @@ namespace free_ps2_pub_gen {
             linkLabel2.Text = "@flat_z";
             label5.Text = "Template PS2 Emu PKG provided by\n";
             linkLabel3.Text = "@Celest123";
+            label6.Text = "make_fself.exe port of flat_z py script by\n";
+            linkLabel4.Text = "@xDPx";
         }
 
         /// <summary>
@@ -56,6 +58,16 @@ namespace free_ps2_pub_gen {
         private void LlinkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             linkLabel3.LinkVisited = true;
             Process.Start("https://twitter.com/CelesteBlue123");
+        }
+
+        /// <summary>
+        /// Link Label clicked.
+        /// </summary>
+        /// <param name="sender">The Sender.</param>
+        /// <param name="e">The Event Arguemtns.</param>
+        private void LlinkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            linkLabel4.LinkVisited = true;
+            Process.Start("https://twitter.com/thedarkprogr");
         }
     }
 }

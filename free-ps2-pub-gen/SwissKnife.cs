@@ -308,7 +308,7 @@ namespace free_ps2_pub_gen {
         public static bool Contains<T>(this T[] source, T[] range) {
             if (source == null) throw new FormatException("Null Refernce", new Exception("The Array to check for a value existens is not Initialized."));
             for (int i = 0; i < source.Length; i++) {
-                if (source[i].Equals(range[i])) {
+                if (source[i].Equals(range[0])) {
                     if ((source.Length - i) >= range.Length) {
                         int match = 1;
                         for (int j = 1; j < range.Length; j++) {
@@ -369,7 +369,7 @@ namespace free_ps2_pub_gen {
         public static bool Equals<T>(this T[] source, T[] range, [Optional] bool sameLength) {
             if (source == null) throw new FormatException("Null Refernce", new Exception("The Array to check for a value existens is not Initialized."));
             if (sameLength) if (source.Length != range.Length) return false;
-            for (int i = 0; i < range.Length; i++) if (!source[i].Equals(range[i])) return false;
+            for (int i = 0; i < range.Length; i++) { if (!source[i].Equals(range[i])) return false; }
             return true;
         }
 
@@ -382,7 +382,7 @@ namespace free_ps2_pub_gen {
         /// <returns>The index of the value within the array if found, else -1.</returns>
         public static int IndexOf<T>(this T[] source, T value) {
             if (source == null) throw new FormatException("Null Refernce", new Exception("The Array to check for a value existens is not Initialized."));
-            for (int i = 0; i < source.Length; i++) if (source[i].Equals(value)) return i;
+            for (int i = 0; i < source.Length; i++) { if (source[i].Equals(value)) return i; }
             return -1;
         }
 
@@ -419,7 +419,7 @@ namespace free_ps2_pub_gen {
         /// <returns>The start index of the array to check within the source array if found, else -1.</returns>
         public static int IndexOf<T>(this T[][] source, T[] toCheck) {
             if (source == null) throw new FormatException("Null Refernce", new Exception("The Array to check for a value existens is not Initialized."));
-            for (int i = 0; i < source.Length; i++) if (source[i].Equals(toCheck)) return i;
+            for (int i = 0; i < source.Length; i++) { if (source[i].Equals(toCheck)) return i; }
             return -1;
         }
 
@@ -432,7 +432,7 @@ namespace free_ps2_pub_gen {
         /// <returns>The index of the value within the array if found, else -1.</returns>
         public static int IndexOfLast<T>(this T[] source, T value) {
             if (source == null) throw new FormatException("Null Refernce", new Exception("The Array to check for a value existens is not Initialized."));
-            for (int i = source.Length - 1; i > -1; i--) if (source[i].Equals(value)) return i;
+            for (int i = source.Length - 1; i > -1; i--) { if (source[i].Equals(value)) return i; }
             return -1;
         }
 

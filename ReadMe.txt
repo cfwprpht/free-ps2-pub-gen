@@ -1,5 +1,13 @@
 *** Free PS2 Pub Gen ***
 
+ v1.5
+ * Changed the make_fself.py to xDPxs exe port. Should now work for a bigger range of users. :)
+ * Added a 'Clear Settings' Functions to the Options.
+ * Removed the librarys from TitleID aka make_self resigning. Libc and LibSceFios2 will now be fake signed by the pub-cmd it self.
+    THX to xDPx for clearifying this part.
+ * Added more infos to the 'Base is not OK !' message.
+ 
+
  Automated Tool for flatz PS4- PS2 Emu PKG Technic. Either place the Tool into the same
  folder then make_fself.py, orbis-pub-cmd-ps2.exe and the authinfo_emu.txt within the template folder.
  Or drop the needed files into the GUI and close and reopen her. You could then even move the App.
@@ -12,7 +20,7 @@
  If i have forgoten something in the readme, i'll add it later.
  For the tool just tell me on twitter what does not work for you and i'll fix as soon as possible.
  
- Special THX to @zordon605, @ps3120 and @Celest123
+ Special THX to @zordon605, @ps3120 and @Celest123, @xDPx for his make_fself.exe :)
  
  Removed the PS4 TitleID and replaced it with the PS2 TitleID to avoid conflicts with real TitleIDs.
  THX to @littlebalup for letting me know.

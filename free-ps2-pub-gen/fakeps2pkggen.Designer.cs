@@ -64,6 +64,7 @@
             this.labelGameName = new System.Windows.Forms.Label();
             this.textBoxPs2TID = new System.Windows.Forms.TextBox();
             this.labelPs2TitId = new System.Windows.Forms.Label();
+            this.optionsClearSettingsToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -95,7 +96,7 @@
             // 
             this.openISOToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("openISOToolStrip.Image")));
             this.openISOToolStrip.Name = "openISOToolStrip";
-            this.openISOToolStrip.Size = new System.Drawing.Size(124, 22);
+            this.openISOToolStrip.Size = new System.Drawing.Size(152, 22);
             this.openISOToolStrip.Text = "Open ISO";
             this.openISOToolStrip.Click += new System.EventHandler(this.OpenISOToolStrip_Click);
             // 
@@ -103,7 +104,7 @@
             // 
             this.closeToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("closeToolStrip.Image")));
             this.closeToolStrip.Name = "closeToolStrip";
-            this.closeToolStrip.Size = new System.Drawing.Size(124, 22);
+            this.closeToolStrip.Size = new System.Drawing.Size(152, 22);
             this.closeToolStrip.Text = "Close";
             this.closeToolStrip.Click += new System.EventHandler(this.CloseToolStrip_Click);
             // 
@@ -125,7 +126,8 @@
             this.makefselfpyToolStrip,
             this.orbispubcmdexeToolStrip,
             this.authinfotxtToolStrip,
-            this.optionsDefTxtCVieToolStrip});
+            this.optionsDefTxtCVieToolStrip,
+            this.optionsClearSettingsToolStrip});
             this.pathsToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("pathsToolStrip.Image")));
             this.pathsToolStrip.Name = "pathsToolStrip";
             this.pathsToolStrip.Size = new System.Drawing.Size(167, 22);
@@ -136,8 +138,8 @@
             this.makefselfpyToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("makefselfpyToolStrip.Image")));
             this.makefselfpyToolStrip.Name = "makefselfpyToolStrip";
             this.makefselfpyToolStrip.Size = new System.Drawing.Size(208, 22);
-            this.makefselfpyToolStrip.Text = "make_fself.py";
-            this.makefselfpyToolStrip.Click += new System.EventHandler(this.MakefselfpyToolStrip_Click);
+            this.makefselfpyToolStrip.Text = "make_fself.exe";
+            this.makefselfpyToolStrip.Click += new System.EventHandler(this.MakefselfToolStrip_Click);
             // 
             // orbispubcmdexeToolStrip
             // 
@@ -400,6 +402,14 @@
             this.labelPs2TitId.TabIndex = 14;
             this.labelPs2TitId.Text = "PS2-TitleID";
             // 
+            // optionsClearSettingsToolStrip
+            // 
+            this.optionsClearSettingsToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("optionsClearSettingsToolStrip.Image")));
+            this.optionsClearSettingsToolStrip.Name = "optionsClearSettingsToolStrip";
+            this.optionsClearSettingsToolStrip.Size = new System.Drawing.Size(208, 22);
+            this.optionsClearSettingsToolStrip.Text = "Clear Settings";
+            this.optionsClearSettingsToolStrip.Click += new System.EventHandler(this.optionsClearSettingsToolStrip_Click);
+            // 
             // Fakeps2pkggen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -475,6 +485,7 @@
         private System.Windows.Forms.Label labelGameName;
         private System.Windows.Forms.TextBox textBoxPs2TID;
         private System.Windows.Forms.Label labelPs2TitId;
+        private System.Windows.Forms.ToolStripMenuItem optionsClearSettingsToolStrip;
     }
 }
 
